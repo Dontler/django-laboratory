@@ -1,0 +1,45 @@
+{% load static %}
+<html>
+    <head>
+        <title>Laboratory blog</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{% static 'css/article.css' %}">
+        <script src="{% static 'js/main.js' %}" ></script>
+    </head>
+    <body>
+        <div class="page-header">
+            <h1><a href="/">Laboratory blog</a></h1>
+            <form id="search" class="search" method="POST" action="{% url 'search' %}">
+                {% csrf_token %}
+                <input id="txtSearch" type="text" class="search_input">
+                <button type="submit" class="search_btn">Поиск</button>
+            </form>
+        </div>
+
+        <div class="content container">
+            <div class="row">
+                <div class="col-md-8">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function(){ 
+                $("#txtSearch").autocomplete({
+                    source: "{% url 'search' %}",
+                    minLength: 2,
+                    open: function(){
+                    setTimeout(function () {
+                        $('.ui-autocomplete').css('z-index', 99);
+                    }, 0);}
+                });
+            });
+        </script>
+    </body>
+</html>
