@@ -14,10 +14,11 @@
     <body>
         <div class="page-header">
             <h1><a href="/">Laboratory blog</a></h1>
+            <h3><a href='{% url "post_search" %}'>Найти пост</a></h3>
             <form id="search" class="search" method="POST" action="{% url 'search' %}">
                 {% csrf_token %}
                 <input id="txtSearch" type="text" class="search_input">
-                <button type="submit" class="search_btn">Поиск</button>
+                <button id="search_btn" type="submit" class="search_btn">Поиск</button>
             </form>
         </div>
 

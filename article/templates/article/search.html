@@ -1,0 +1,18 @@
+{% extends 'article/base.html' %}
+
+{% block content %}
+    <div class="search_form">
+        <form id='form' action="" method="POST">
+            {% csrf_token %}
+            <div>
+                {{ form.query.errors }}
+                {{ form.query }}
+                <button class='search_btn' type="submit">Поиск</button>
+            </div>
+        </form>
+
+        <div id="posts">
+
+        </div>
+    </div>
+{% endblock %}

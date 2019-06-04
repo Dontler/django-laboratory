@@ -1,0 +1,12 @@
+{% if not posts %}
+    <div>
+        <span>Не найдено записей</span>
+    </div>
+{% else %}
+    {% for post in posts %}
+        <div>
+            <h3>{{ post.title }}</h3>
+            <span>{{ post.text }}</span>
+        </div>
+    {% endfor %}
+{% endif %}

@@ -1,6 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpRequest
 from .models import Post
+from django.template import Context
+from django.template.loader import render_to_string
+from .forms import SearchForm
 from django.utils import timezone
 import json
 
@@ -23,7 +26,30 @@ def search(request):
         for r in search_qs:
             results.append(r.title)
         data = json.dumps(results)
+    elif request.method == 'POST':
+        print(request.body)
+        q = request.body
+        posts = Post.objects.filter(title__icontains=q)
+        results = []
+        for p in posts:
+            results.append(p.title)
+        data = json.dumps(results)
     else:
         data = 'fail'
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
+
+def post_search(request):
+    if request.method == 'GET':
+        return render(request, 'article/search.html', {'form': SearchForm()})
+    elif request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            q = form.cleaned_data['query']
+            posts = Post.objects.filter(text__icontains=q)
+            context = {'query': q, 'posts': posts}
+            s = render_to_string('article/post_search.html', {'query': q, 'posts': posts})
+            return HttpResponse(json.dumps(s), 'application/json')
+        else:
+            redirect('/search')
